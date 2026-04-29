@@ -1,0 +1,201 @@
+<div class="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 dark:from-gray-900 dark:via-gray-800 dark:to-black p-4">
+  <!-- Theme Toggle -->
+  <div class="absolute top-4 right-4">
+    <button
+      (click)="themeService.toggleTheme()"
+      class="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors duration-200"
+    >
+      <svg *ngIf="!(themeService.isDarkMode$ | async)" class="w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+      </svg>
+      <svg *ngIf="themeService.isDarkMode$ | async" class="w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Header -->
+  <div class="max-w-4xl mx-auto">
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-bold text-white mb-2">OWNER DASHBOARD</h1>
+      <div class="w-32 h-1 bg-gradient-to-r from-yellow-400 to-orange-500 mx-auto rounded-full"></div>
+    </div>
+
+    <div class="mb-6 max-w-md mx-auto">
+      <label class="block text-sm text-gray-300 mb-2">Select Game</label>
+      <select
+        [(ngModel)]="selectedGameType"
+        (change)="onGameTypeChange()"
+        class="w-full bg-white/10 border border-white/20 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+      >
+        <option
+          *ngFor="let type of gameTypes"
+          [ngValue]="type.value"
+          class="text-white bg-slate-900"
+        >
+          {{ type.label }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Loading and Error Messages -->
+    <div *ngIf="isLoading" class="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4 mb-6 text-center">
+      <div class="flex items-center justify-center text-blue-400">
+        <svg class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        Loading dashboard data...
+      </div>
+    </div>
+
+    <!-- Game Status Card -->
+    <div *ngIf="game" class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 mb-6 border border-white/20">
+      <h2 class="text-2xl font-bold text-white mb-4 flex items-center">
+        <span class="mr-2">🎮</span> {{ selectedGameLabel }} Status
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-white/5 rounded-lg p-4">
+          <p class="text-gray-300 text-sm">Game Name</p>
+          <p class="text-white font-semibold text-lg">{{ game!.name }}</p>
+        </div>
+        <div class="bg-white/5 rounded-lg p-4">
+          <p class="text-gray-300 text-sm">Status</p>
+          <p class="text-white font-semibold text-lg" [class.text-green-400]="game!.active" [class.text-red-400]="!game!.active">
+            {{ game!.active ? '🟢 Active' : '🔴 Inactive' }}
+          </p>
+        </div>
+        <div class="bg-white/5 rounded-lg p-4">
+          <p class="text-gray-300 text-sm">Open Number</p>
+          <p class="text-white font-semibold text-lg">{{ game!.openNumber || 'Not set' }}</p>
+        </div>
+        <div class="bg-white/5 rounded-lg p-4">
+          <p class="text-gray-300 text-sm">Close Number</p>
+          <p class="text-white font-semibold text-lg">{{ game!.closeNumber || 'Not set' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game Control Buttons -->
+    <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 mb-6 border border-white/20">
+      <h2 class="text-2xl font-bold text-white mb-4 flex items-center">
+        <span class="mr-2">⚙️</span> Game Controls
+      </h2>
+      <div class="flex flex-wrap gap-4">
+        <button
+          (click)="startGame()"
+          [disabled]="game?.active"
+          [title]="game?.active ? 'Game is already active. End it first to start a new game.' : ''"
+          class="px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          ▶️ Start Game
+        </button>
+        <button
+          (click)="endGame()"
+          [disabled]="!game?.active"
+          class="px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          ⏹️ End Game
+        </button>
+      </div>
+    </div>
+
+    <!-- Number Settings for Ending Game -->
+    <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 mb-6 border border-white/20">
+      <h2 class="text-2xl font-bold text-white mb-4 flex items-center">
+        <span class="mr-2">🎯</span> Numbers for Ending Game
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <input
+            type="text"
+            [(ngModel)]="openNumber"
+            name="openNumber"
+            [disabled]="!canSetOpen"
+            class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all duration-200 mb-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            placeholder="Enter open number"
+          >
+          <button
+            (click)="setOpen()"
+            [disabled]="!canSetOpen"
+            class="w-full px-6 py-3 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white font-bold rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Set Open Number
+          </button>
+          <p *ngIf="!canSetOpen" class="text-xs text-gray-400 mt-2">Open number is only available when a game is active and open number is not set.</p>
+        </div>
+        <div>
+          <input
+            type="text"
+            [(ngModel)]="closeNumber"
+            name="closeNumber"
+            [disabled]="!canSetClose"
+            class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all duration-200 mb-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            placeholder="Enter close number"
+          >
+          <button
+            (click)="setClose()"
+            [disabled]="!canSetClose"
+            class="w-full px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Set Close Number
+          </button>
+          <p *ngIf="!canSetClose" class="text-xs text-gray-400 mt-2">Close number is only available after open number is set and before the game ends.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game History -->
+    <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 mb-6 border border-white/20">
+      <h2 class="text-2xl font-bold text-white mb-4 flex items-center">
+        <span class="mr-2">📊</span> Game History
+      </h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-white">
+          <thead>
+            <tr class="border-b border-white/20">
+              <th class="text-left py-2 px-4">ID</th>
+              <th class="text-left py-2 px-4">Name</th>
+              <th class="text-left py-2 px-4">Status</th>
+              <th class="text-left py-2 px-4">Open Number</th>
+              <th class="text-left py-2 px-4">Close Number</th>
+              <th class="text-left py-2 px-4">Open Time</th>
+              <th class="text-left py-2 px-4">Close Time</th>
+              <th class="text-left py-2 px-4">Created At</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let g of games" class="border-b border-white/10">
+              <td class="py-2 px-4">{{ g.id }}</td>
+              <td class="py-2 px-4">{{ g.name }}</td>
+              <td class="py-2 px-4" [class.text-green-400]="g.active" [class.text-red-400]="!g.active">
+                {{ g.active ? 'Active' : 'Inactive' }}
+              </td>
+              <td class="py-2 px-4">{{ g.openNumber || '-' }}</td>
+              <td class="py-2 px-4">{{ g.closeNumber || '-' }}</td>
+              <td class="py-2 px-4">{{ g.openTime | dateFormat }}</td>
+              <td class="py-2 px-4">{{ g.closeTime | dateFormat }}</td>
+              <td class="py-2 px-4">{{ g.createdAt | dateFormat }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Footer Actions -->
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <button
+        (click)="logout()"
+        class="px-6 py-3 bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-bold rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+      >
+        🚪 Logout
+      </button>
+      <a
+        routerLink="/"
+        class="px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 text-center"
+      >
+        🏠 Back to Home
+      </a>
+    </div>
+  </div>
+</div>
