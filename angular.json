@@ -35,6 +35,11 @@
                 "glob": "_redirects",
                 "input": "public",
                 "output": "."
+              },
+              {
+                "glob": ".htaccess",
+                "input": "public",
+                "output": "."
               }
             ],
             "styles": [
