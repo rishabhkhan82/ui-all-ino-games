@@ -23,6 +23,7 @@ export class DashboardComponent implements OnInit {
   games: Game[] = [];
   openNumber = '';
   closeNumber = '';
+  finalNumber = '';
   isLoading = false;
   selectedGameType = 1;
   gameTypes = [
@@ -81,16 +82,17 @@ export class DashboardComponent implements OnInit {
   }
 
   endGame() {
-    if (!this.openNumber || !this.closeNumber) {
-      this.notificationService.show('Both open and close numbers are required to end the game.', 'error');
+    if (!this.game?.openNumber || !this.game?.closeNumber || !this.game?.finalNumber) {
+      this.notificationService.show('Open number, close number, and final number are all required to end the game.', 'error');
       return;
     }
 
-    this.gameService.endGame(this.openNumber, this.closeNumber, this.selectedGameType).subscribe({
+    this.gameService.endGame(this.game.openNumber, this.game.closeNumber, this.selectedGameType).subscribe({
       next: (data: Game) => {
         this.game = data;
         this.openNumber = '';
         this.closeNumber = '';
+        this.finalNumber = '';
         this.loadData();
         this.notificationService.show('Game ended successfully', 'success');
       },
@@ -139,7 +141,7 @@ export class DashboardComponent implements OnInit {
 
     this.gameService.setCloseNumber(this.closeNumber, this.selectedGameType).subscribe({
       next: (data: Game | null) => {
-        this.game = data && data.active ? data : null;
+        this.game = data;
         this.closeNumber = '';
         this.loadData();
         this.notificationService.show('Close number set successfully', 'success');
@@ -151,12 +153,41 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  setFinal() {
+    if (!this.canSetFinal) {
+      this.notificationService.show('Final number can only be set after the close number is set.', 'error');
+      return;
+    }
+
+    if (!this.finalNumber) {
+      this.notificationService.show('Please enter the final number.', 'error');
+      return;
+    }
+
+    this.gameService.setFinalNumber(this.finalNumber, this.selectedGameType).subscribe({
+      next: (data: Game | null) => {
+        this.game = data;
+        this.finalNumber = '';
+        this.loadData();
+        this.notificationService.show('Final number set successfully', 'success');
+      },
+      error: (err: any) => {
+        console.error('Error setting final number:', err);
+        this.notificationService.show('Failed to set final number', 'error');
+      }
+    });
+  }
+
   get canSetOpen(): boolean {
     return !!this.game && this.game.active && !this.game.openNumber;
   }
 
   get canSetClose(): boolean {
     return !!this.game && this.game.active && !!this.game.openNumber && !this.game.closeNumber;
+  }
+
+  get canSetFinal(): boolean {
+    return !!this.game && this.game.active && !!this.game.openNumber && !!this.game.closeNumber && !this.game.finalNumber;
   }
 
   get selectedGameLabel(): string {

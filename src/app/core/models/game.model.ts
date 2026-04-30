@@ -7,6 +7,7 @@ export interface Game {
   openNumber: string;
   closeTime: string;
   closeNumber: string;
+  finalNumber: string;
   createdAt: string;
 }
 

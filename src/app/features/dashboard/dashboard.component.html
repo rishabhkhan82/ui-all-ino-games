@@ -73,6 +73,10 @@
           <p class="text-gray-300 text-sm">Close Number</p>
           <p class="text-white font-semibold text-lg">{{ game!.closeNumber || 'Not set' }}</p>
         </div>
+        <div class="bg-white/5 rounded-lg p-4">
+          <p class="text-gray-300 text-sm">Final Number</p>
+          <p class="text-white font-semibold text-lg">{{ game!.finalNumber || 'Not set' }}</p>
+        </div>
       </div>
     </div>
 
@@ -92,7 +96,8 @@
         </button>
         <button
           (click)="endGame()"
-          [disabled]="!game?.active"
+          [disabled]="!game?.active || !game?.openNumber || !game?.closeNumber || !game?.finalNumber"
+          [title]="!game?.openNumber || !game?.closeNumber || !game?.finalNumber ? 'All three numbers (open, close, final) must be set before ending the game' : ''"
           class="px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           ⏹️ End Game
@@ -103,9 +108,9 @@
     <!-- Number Settings for Ending Game -->
     <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 mb-6 border border-white/20">
       <h2 class="text-2xl font-bold text-white mb-4 flex items-center">
-        <span class="mr-2">🎯</span> Numbers for Ending Game
+        <span class="mr-2">🎯</span> Set Game Numbers (Open → Close → Final)
       </h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
           <input
             type="text"
@@ -140,7 +145,25 @@
           >
             Set Close Number
           </button>
-          <p *ngIf="!canSetClose" class="text-xs text-gray-400 mt-2">Close number is only available after open number is set and before the game ends.</p>
+          <p *ngIf="!canSetClose" class="text-xs text-gray-400 mt-2">Close number is only available after open number is set.</p>
+        </div>
+        <div>
+          <input
+            type="text"
+            [(ngModel)]="finalNumber"
+            name="finalNumber"
+            [disabled]="!canSetFinal"
+            class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all duration-200 mb-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            placeholder="Enter final number"
+          >
+          <button
+            (click)="setFinal()"
+            [disabled]="!canSetFinal"
+            class="w-full px-6 py-3 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Set Final Number
+          </button>
+          <p *ngIf="!canSetFinal" class="text-xs text-gray-400 mt-2">Final number is only available after close number is set.</p>
         </div>
       </div>
     </div>
@@ -159,6 +182,7 @@
               <th class="text-left py-2 px-4">Status</th>
               <th class="text-left py-2 px-4">Open Number</th>
               <th class="text-left py-2 px-4">Close Number</th>
+              <th class="text-left py-2 px-4">Final Number</th>
               <th class="text-left py-2 px-4">Open Time</th>
               <th class="text-left py-2 px-4">Close Time</th>
               <th class="text-left py-2 px-4">Created At</th>
@@ -173,6 +197,7 @@
               </td>
               <td class="py-2 px-4">{{ g.openNumber || '-' }}</td>
               <td class="py-2 px-4">{{ g.closeNumber || '-' }}</td>
+              <td class="py-2 px-4">{{ g.finalNumber || '-' }}</td>
               <td class="py-2 px-4">{{ g.openTime | dateFormat }}</td>
               <td class="py-2 px-4">{{ g.closeTime | dateFormat }}</td>
               <td class="py-2 px-4">{{ g.createdAt | dateFormat }}</td>

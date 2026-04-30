@@ -25,6 +25,7 @@ export class GameService {
       openNumber: data.openNumber ?? data.open_number ?? '',
       closeTime: data.closeTime ?? data.close_time ?? '',
       closeNumber: data.closeNumber ?? data.close_number ?? '',
+      finalNumber: data.finalNumber ?? data.final_number ?? '',
       createdAt: data.createdAt ?? data.created_at ?? ''
     };
   }
@@ -78,6 +79,14 @@ export class GameService {
 
   setCloseNumber(number: string, gameType?: number): Observable<Game> {
     return this.http.post<any>(`${environment.apiUrl}/admin/game/setClose${this.buildParams({ number, type: gameType })}`, {}, {
+      headers: this.authService.getAuthHeaders()
+    }).pipe(
+      map(data => this.normalizeGame(data))
+    );
+  }
+
+  setFinalNumber(number: string, gameType?: number): Observable<Game> {
+    return this.http.post<any>(`${environment.apiUrl}/admin/game/setFinal${this.buildParams({ number, type: gameType })}`, {}, {
       headers: this.authService.getAuthHeaders()
     }).pipe(
       map(data => this.normalizeGame(data))
