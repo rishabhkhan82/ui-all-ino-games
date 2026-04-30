@@ -35,34 +35,56 @@
       </div>
 
       <!-- Numbers Display -->
-      <div *ngIf="game.active" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div *ngIf="game.active" class="grid grid-cols-3 gap-2 md:gap-6">
         <!-- Open Number -->
-        <div class="bg-white/5 rounded-xl p-6 border border-white/10">
+        <div class="bg-white/5 rounded-xl p-4 md:p-6 border border-white/10 min-h-[200px] md:min-h-[280px] flex flex-col justify-center">
           <div class="text-center">
-            <div class="text-yellow-400 text-sm font-medium mb-2">OPEN NUMBER</div>
-            <div class="text-6xl font-bold text-white mb-2" [class.animate-pulse]="!game!.openNumber">
+            <div class="text-yellow-400 text-xs md:text-sm font-medium mb-2">OPEN NUMBER</div>
+            <div class="text-4xl md:text-6xl font-bold text-white mb-2" [class.animate-pulse]="!game!.openNumber">
               {{ game!.openNumber || '⏳' }}
             </div>
-            <div class="text-gray-300 text-sm" *ngIf="game!.openTime">
+            <div class="text-gray-300 text-xs md:text-sm" *ngIf="game!.openTime">
               Announced at {{ game!.openTime | dateFormat }}
             </div>
-            <div class="text-gray-400 text-sm" *ngIf="!game!.openNumber">
+            <div class="text-gray-400 text-xs md:text-sm" *ngIf="!game!.openNumber">
               Waiting for announcement...
             </div>
           </div>
         </div>
 
+        <!-- Final Number -->
+        <div *ngIf="game!.finalNumber" class="bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 rounded-2xl p-4 md:p-6 border-4 border-yellow-300 shadow-2xl transform hover:scale-105 transition-transform duration-500 fireworks-container relative overflow-hidden animate-bounce min-h-[200px] md:min-h-[280px] flex flex-col justify-center">
+          <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+          <div class="sparkle"></div>
+          <div class="sparkle"></div>
+          <div class="sparkle"></div>
+          <div class="sparkle"></div>
+          <div class="sparkle"></div>
+          <div class="text-center relative z-10 h-full flex flex-col">
+            <div class="flex-1 flex items-start justify-center pt-4 md:pt-8">
+              <div class="text-6xl md:text-8xl font-black text-white final-number-3d mb-2 md:mb-4">
+                {{ game!.finalNumber }}
+              </div>
+            </div>
+            <div class="absolute bottom-2 md:bottom-4 left-1/2 transform -translate-x-1/2">
+              <div class="text-white text-xs md:text-sm font-semibold bg-gradient-to-r from-purple-500 to-pink-500 px-3 md:px-4 py-1 md:py-2 rounded-lg inline-block whitespace-nowrap">
+                🏆 FINAL NO 🏆
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Close Number -->
-        <div class="bg-white/5 rounded-xl p-6 border border-white/10">
+        <div class="bg-white/5 rounded-xl p-4 md:p-6 border border-white/10 min-h-[200px] md:min-h-[280px] flex flex-col justify-center">
           <div class="text-center">
-            <div class="text-orange-400 text-sm font-medium mb-2">CLOSE NUMBER</div>
-            <div class="text-6xl font-bold text-white mb-2" [class.animate-pulse]="!game!.closeNumber">
+            <div class="text-orange-400 text-xs md:text-sm font-medium mb-2">CLOSE NUMBER</div>
+            <div class="text-4xl md:text-6xl font-bold text-white mb-2" [class.animate-pulse]="!game!.closeNumber">
               {{ game!.closeNumber || '⏳' }}
             </div>
-            <div class="text-gray-300 text-sm" *ngIf="game!.closeTime">
+            <div class="text-gray-300 text-xs md:text-sm" *ngIf="game!.closeTime">
               Announced at {{ game!.closeTime | dateFormat }}
             </div>
-            <div class="text-gray-400 text-sm" *ngIf="!game!.closeNumber">
+            <div class="text-gray-400 text-xs md:text-sm" *ngIf="!game!.closeNumber">
               Waiting for announcement...
             </div>
           </div>
@@ -77,47 +99,92 @@
       </div>
     </div>
 
+    <!-- No Game Available -->
+    <div *ngIf="!game" class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 text-center border border-white/20 mb-6">
+      <div class="text-6xl mb-4">❌</div>
+      <h3 class="text-2xl font-bold text-white mb-2">No Active Game Available</h3>
+      <p class="text-gray-300">There is no active game available at the moment.</p>
+      <p class="text-gray-400 text-sm mt-2">Please try again later or contact support.</p>
+          <div class="text-center mt-8">
+      <a
+        routerLink="/"
+        class="inline-block px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+      >
+        🏠 Back to Home
+      </a>
+    </div>
+    </div>
+
     <!-- Today's Games History -->
     <div *ngIf="games.length > 0" class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 mb-6 border border-white/20">
       <h2 class="text-2xl font-bold text-white mb-4 flex items-center">
         <span class="mr-2">📊</span> Today's Games History
       </h2>
-      <div class="overflow-x-auto">
-        <table class="w-full text-white text-sm">
-          <thead>
-            <tr class="border-b border-white/20">
-              <th class="text-left py-2 px-2">Name</th>
-              <th class="text-left py-2 px-2">Status</th>
-              <th class="text-left py-2 px-2">Open</th>
-              <th class="text-left py-2 px-2">Close</th>
-              <th class="text-left py-2 px-2">Open Time</th>
-              <th class="text-left py-2 px-2">Started</th>
-              <th class="text-left py-2 px-2">Closed</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let g of games" class="border-b border-white/10">
-              <td class="py-2 px-2">{{ g.name }}</td>
-              <td class="py-2 px-2" [class.text-green-400]="g.active" [class.text-red-400]="!g.active">
-                {{ g.active ? 'Active' : 'Ended' }}
-              </td>
-              <td class="py-2 px-2">{{ g.openNumber || '-' }}</td>
-              <td class="py-2 px-2">{{ g.closeNumber || '-' }}</td>
-              <td class="py-2 px-2">{{ g.openTime | dateFormat }}</td>
-              <td class="py-2 px-2">{{ g.createdAt | dateFormat }}</td>
-              <td class="py-2 px-2">{{ g.closeTime | dateFormat }}</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="space-y-4">
+        <div *ngFor="let g of games" class="bg-white/15 backdrop-blur-lg rounded-xl p-5 border border-white/30 shadow-lg hover:shadow-xl transition-all duration-300 hover:transform hover:scale-[1.02]">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center space-x-2">
+              <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                <span class="text-white text-xs font-bold">📅</span>
+              </div>
+              <span class="text-white font-semibold text-base">{{ g.createdAt | dateFormat }}</span>
+            </div>
+            <div class="text-gray-300 text-sm">
+              {{ g.active ? '🟢 Active' : '🔴 Completed' }}
+            </div>
+          </div>
+          <div class="grid grid-cols-3 gap-4">
+            <div class="bg-gradient-to-br from-yellow-500/30 to-yellow-600/40 rounded-lg p-4 border border-yellow-400/50 text-center hover:bg-yellow-500/40 transition-colors duration-200">
+              <div class="text-yellow-200 text-xs font-medium uppercase tracking-wide mb-1">Open Number</div>
+              <div class="text-white text-3xl font-bold">{{ g.openNumber || '—' }}</div>
+            </div>
+            <div class="bg-gradient-to-br from-orange-500/30 to-red-500/40 rounded-lg p-4 border border-orange-400/50 text-center hover:bg-orange-500/40 transition-colors duration-200" [class.ring-2]="g.finalNumber" [class.ring-yellow-400]="g.finalNumber">
+              <div class="text-orange-200 text-xs font-medium uppercase tracking-wide mb-1">Final Number</div>
+              <div class="text-white text-3xl font-bold" [class.text-yellow-300]="g.finalNumber">{{ g.finalNumber || '—' }}</div>
+            </div>
+            <div class="bg-gradient-to-br from-red-500/30 to-pink-500/40 rounded-lg p-4 border border-red-400/50 text-center hover:bg-red-500/40 transition-colors duration-200">
+              <div class="text-red-200 text-xs font-medium uppercase tracking-wide mb-1">Close Number</div>
+              <div class="text-white text-3xl font-bold">{{ g.closeNumber || '—' }}</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- No Game Available -->
-    <div *ngIf="!game" class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 text-center border border-white/20">
-      <div class="text-6xl mb-4">❌</div>
-      <h3 class="text-2xl font-bold text-white mb-2">No Active Game Available</h3>
-      <p class="text-gray-300">There is no active game available at the moment.</p>
-      <p class="text-gray-400 text-sm mt-2">Please try again later or contact support.</p>
+    <!-- Previous Games History -->
+    <div *ngIf="previousGames.length > 0" class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 mb-6 border border-white/20">
+      <h2 class="text-2xl font-bold text-white mb-4 flex items-center">
+        <span class="mr-2">📚</span> Previous Games History
+      </h2>
+      <div class="space-y-4">
+        <div *ngFor="let g of previousGames" class="bg-white/15 backdrop-blur-lg rounded-xl p-5 border border-white/30 shadow-lg hover:shadow-xl transition-all duration-300 hover:transform hover:scale-[1.02]">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center space-x-2">
+              <div class="w-8 h-8 bg-gradient-to-r from-green-500 to-teal-600 rounded-full flex items-center justify-center">
+                <span class="text-white text-xs font-bold">📅</span>
+              </div>
+              <span class="text-white font-semibold text-base">{{ g.createdAt | dateFormat }}</span>
+            </div>
+            <div class="text-gray-300 text-sm">
+              🔴 Completed
+            </div>
+          </div>
+          <div class="grid grid-cols-3 gap-4">
+            <div class="bg-gradient-to-br from-yellow-500/30 to-yellow-600/40 rounded-lg p-4 border border-yellow-400/50 text-center hover:bg-yellow-500/40 transition-colors duration-200">
+              <div class="text-yellow-200 text-xs font-medium uppercase tracking-wide mb-1">Open Number</div>
+              <div class="text-white text-3xl font-bold">{{ g.openNumber || '—' }}</div>
+            </div>
+            <div class="bg-gradient-to-br from-orange-500/30 to-red-500/40 rounded-lg p-4 border border-orange-400/50 text-center hover:bg-orange-500/40 transition-colors duration-200" [class.ring-2]="g.finalNumber" [class.ring-yellow-400]="g.finalNumber">
+              <div class="text-orange-200 text-xs font-medium uppercase tracking-wide mb-1">Final Number</div>
+              <div class="text-white text-3xl font-bold" [class.text-yellow-300]="g.finalNumber">{{ g.finalNumber || '—' }}</div>
+            </div>
+            <div class="bg-gradient-to-br from-red-500/30 to-pink-500/40 rounded-lg p-4 border border-red-400/50 text-center hover:bg-red-500/40 transition-colors duration-200">
+              <div class="text-red-200 text-xs font-medium uppercase tracking-wide mb-1">Close Number</div>
+              <div class="text-white text-3xl font-bold">{{ g.closeNumber || '—' }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Back Button -->
@@ -132,10 +199,10 @@
 
     <!-- Loading Animation -->
     <div class="mt-8 flex justify-center">
-      <div class="flex space-x-2">
-        <div class="w-4 h-4 bg-yellow-400 rounded-full animate-bounce"></div>
-        <div class="w-4 h-4 bg-orange-500 rounded-full animate-bounce delay-100"></div>
-        <div class="w-4 h-4 bg-red-500 rounded-full animate-bounce delay-200"></div>
+      <div class="flex space-x-4 text-4xl">
+        <div class="animate-bounce">⭐</div>
+        <div class="animate-bounce delay-100">🌟</div>
+        <div class="animate-bounce delay-200">✨</div>
       </div>
     </div>
   </div>

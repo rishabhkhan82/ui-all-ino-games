@@ -73,9 +73,9 @@
           <p class="text-gray-300 text-sm">Close Number</p>
           <p class="text-white font-semibold text-lg">{{ game!.closeNumber || 'Not set' }}</p>
         </div>
-        <div class="bg-white/5 rounded-lg p-4">
+        <div class="bg-white/5 rounded-lg p-4" [ngClass]="{'bg-gradient-to-r from-yellow-500/20 to-orange-500/20 animate-pulse': game!.finalNumber, 'border-2 border-yellow-400': game!.finalNumber}">
           <p class="text-gray-300 text-sm">Final Number</p>
-          <p class="text-white font-semibold text-lg">{{ game!.finalNumber || 'Not set' }}</p>
+          <p class="font-semibold text-lg" [ngClass]="{'text-yellow-400 font-bold': game!.finalNumber, 'text-white': !game!.finalNumber}">{{ game!.finalNumber || 'Not set' }}</p>
         </div>
       </div>
     </div>

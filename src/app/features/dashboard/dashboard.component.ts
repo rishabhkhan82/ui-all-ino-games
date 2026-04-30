@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -7,7 +7,9 @@ import { AuthService } from '../../core/services/auth.service';
 import { GameService } from '../../core/services/game.service';
 import { ThemeService } from '../../theme.service';
 import { NotificationService } from '../../core/services/notification.service';
+import { ConfirmationService } from '../../core/services/confirmation.service';
 import { DateFormatPipe } from '../../shared/pipes/date-format.pipe';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -17,7 +19,8 @@ import { DateFormatPipe } from '../../shared/pipes/date-format.pipe';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
+  private subscriptions: Subscription[] = [];
 
   game: Game | null = null;
   games: Game[] = [];
@@ -36,7 +39,8 @@ export class DashboardComponent implements OnInit {
     public themeService: ThemeService,
     private gameService: GameService,
     private authService: AuthService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private confirmationService: ConfirmationService
   ) {}
 
   ngOnInit() {
@@ -87,7 +91,7 @@ export class DashboardComponent implements OnInit {
       return;
     }
 
-    this.gameService.endGame(this.game.openNumber, this.game.closeNumber, this.selectedGameType).subscribe({
+    this.gameService.endGame(this.selectedGameType).subscribe({
       next: (data: Game) => {
         this.game = data;
         this.openNumber = '';
@@ -114,18 +118,26 @@ export class DashboardComponent implements OnInit {
       return;
     }
 
-    this.gameService.setOpenNumber(this.openNumber, this.selectedGameType).subscribe({
-      next: (data: Game | null) => {
-        this.game = data;
-        this.openNumber = '';
-        this.loadData();
-        this.notificationService.show('Open number set successfully', 'success');
-      },
-      error: (err: any) => {
-        console.error('Error setting open number:', err);
-        this.notificationService.show('Failed to set open number', 'error');
+    const sub = this.confirmationService.confirm(
+      'Set Open Number',
+      `Are you sure you want to set the open number to ${this.openNumber}?`
+    ).subscribe(confirmed => {
+      if (confirmed) {
+        this.gameService.setOpenNumber(this.openNumber, this.selectedGameType).subscribe({
+          next: (data: Game | null) => {
+            this.game = data;
+            this.openNumber = '';
+            this.loadData();
+            this.notificationService.show('Open number set successfully', 'success');
+          },
+          error: (err: any) => {
+            console.error('Error setting open number:', err);
+            this.notificationService.show('Failed to set open number', 'error');
+          }
+        });
       }
     });
+    this.subscriptions.push(sub);
   }
 
   setClose() {
@@ -139,18 +151,26 @@ export class DashboardComponent implements OnInit {
       return;
     }
 
-    this.gameService.setCloseNumber(this.closeNumber, this.selectedGameType).subscribe({
-      next: (data: Game | null) => {
-        this.game = data;
-        this.closeNumber = '';
-        this.loadData();
-        this.notificationService.show('Close number set successfully', 'success');
-      },
-      error: (err: any) => {
-        console.error('Error setting close number:', err);
-        this.notificationService.show('Failed to set close number', 'error');
+    const sub = this.confirmationService.confirm(
+      'Set Close Number',
+      `Are you sure you want to set the close number to ${this.closeNumber}?`
+    ).subscribe(confirmed => {
+      if (confirmed) {
+        this.gameService.setCloseNumber(this.closeNumber, this.selectedGameType).subscribe({
+          next: (data: Game | null) => {
+            this.game = data;
+            this.closeNumber = '';
+            this.loadData();
+            this.notificationService.show('Close number set successfully', 'success');
+          },
+          error: (err: any) => {
+            console.error('Error setting close number:', err);
+            this.notificationService.show('Failed to set close number', 'error');
+          }
+        });
       }
     });
+    this.subscriptions.push(sub);
   }
 
   setFinal() {
@@ -164,18 +184,26 @@ export class DashboardComponent implements OnInit {
       return;
     }
 
-    this.gameService.setFinalNumber(this.finalNumber, this.selectedGameType).subscribe({
-      next: (data: Game | null) => {
-        this.game = data;
-        this.finalNumber = '';
-        this.loadData();
-        this.notificationService.show('Final number set successfully', 'success');
-      },
-      error: (err: any) => {
-        console.error('Error setting final number:', err);
-        this.notificationService.show('Failed to set final number', 'error');
+    const sub = this.confirmationService.confirm(
+      'Set Final Number',
+      `Are you sure you want to set the final number to ${this.finalNumber}?`
+    ).subscribe(confirmed => {
+      if (confirmed) {
+        this.gameService.setFinalNumber(this.finalNumber, this.selectedGameType).subscribe({
+          next: (data: Game | null) => {
+            this.game = data;
+            this.finalNumber = '';
+            this.loadData();
+            this.notificationService.show('Final number set successfully', 'success');
+          },
+          error: (err: any) => {
+            console.error('Error setting final number:', err);
+            this.notificationService.show('Failed to set final number', 'error');
+          }
+        });
       }
     });
+    this.subscriptions.push(sub);
   }
 
   get canSetOpen(): boolean {
@@ -211,6 +239,10 @@ export class DashboardComponent implements OnInit {
 
   logout() {
     this.authService.logout();
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
 }

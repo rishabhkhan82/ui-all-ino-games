@@ -24,6 +24,8 @@ export class GameStatusComponent implements OnInit, OnDestroy {
 
   games: Game[] = [];
 
+  previousGames: Game[] = [];
+
   private streamSubscription: Subscription | null = null;
 
   selectedGameType = 1;
@@ -50,6 +52,7 @@ export class GameStatusComponent implements OnInit, OnDestroy {
 
   loadGameData() {
     this.openGameStream();
+    this.fetchAllGames();
   }
 
   private openGameStream() {
@@ -87,6 +90,16 @@ export class GameStatusComponent implements OnInit, OnDestroy {
     this.gameService.getAllGames(this.selectedGameType, this.getTodayDate()).subscribe({
       next: data => this.games = data,
       error: err => console.error('Error fetching today games', err)
+    });
+  }
+
+  fetchAllGames() {
+    this.gameService.getAllGames(this.selectedGameType).subscribe({
+      next: data => {
+        const today = this.getTodayDate();
+        this.previousGames = data.filter(g => g.createdAt.split(' ')[0] !== today);
+      },
+      error: err => console.error('Error fetching all games', err)
     });
   }
 

@@ -61,8 +61,8 @@ export class GameService {
     );
   }
 
-  endGame(openNumber: string, closeNumber: string, gameType?: number): Observable<Game> {
-    return this.http.post<any>(`${environment.apiUrl}/admin/game/end${this.buildParams({ openNumber, closeNumber, type: gameType })}`, {}, {
+  endGame(gameType?: number): Observable<Game> {
+    return this.http.post<any>(`${environment.apiUrl}/admin/game/end${this.buildParams({ type: gameType })}`, {}, {
       headers: this.authService.getAuthHeaders()
     }).pipe(
       map(data => this.normalizeGame(data))
