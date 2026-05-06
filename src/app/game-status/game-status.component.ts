@@ -30,6 +30,8 @@ export class GameStatusComponent implements OnInit, OnDestroy {
 
   selectedGameType = 1;
 
+  gameName: string = 'Orange City Day';
+
   constructor(
     private route: ActivatedRoute,
     private gameService: GameService,
@@ -40,6 +42,7 @@ export class GameStatusComponent implements OnInit, OnDestroy {
     this.route.queryParamMap.subscribe(params => {
       const type = params.get('type');
       this.selectedGameType = type ? Number(type) : 1;
+      this.gameName = this.selectedGameType === 1 ? 'Orange City Day' : 'Orange City Night';
       this.loadGameData();
     });
   }
