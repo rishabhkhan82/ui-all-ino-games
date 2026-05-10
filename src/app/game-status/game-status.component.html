@@ -205,10 +205,36 @@
     <!-- Loading Animation -->
     <div class="mt-8 flex justify-center">
       <div class="flex space-x-4 text-4xl">
-        <div class="animate-bounce">⭐</div>
+        <div class="animate-bounce">🌟</div>
         <div class="animate-bounce delay-100">🌟</div>
-        <div class="animate-bounce delay-200">✨</div>
+        <div class="animate-bounce delay-200">🌟</div>
       </div>
     </div>
   </div>
+</div>
+
+<!-- Fixed Navigation Buttons -->
+<div class="fixed bottom-4 left-4 z-[100]">
+  <button
+    (click)="goBack()"
+    class="w-10 h-10 bg-yellow-400 hover:bg-yellow-500 text-black text-3xl rounded-full flex items-center justify-center shadow-lg"
+  >
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+    </svg>
+  </button>
+</div>
+<div class="fixed bottom-4 right-4 flex space-x-2 z-[100]">
+  <button
+    (click)="scrollToTop()"
+    class="w-10 h-10 bg-yellow-400 hover:bg-yellow-500 text-black text-3xl rounded-full flex items-center justify-center shadow-lg"
+  >
+    &#x2191;
+  </button>
+  <button
+    (click)="scrollToBottom()"
+    class="w-10 h-10 bg-yellow-400 hover:bg-yellow-500 text-black text-3xl rounded-full flex items-center justify-center shadow-lg"
+  >
+    &#x2193;
+  </button>
 </div>

@@ -106,6 +106,18 @@ export class GameStatusComponent implements OnInit, OnDestroy {
     });
   }
 
+  goBack() {
+    window.history.back();
+  }
+
+  scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+
+  scrollToBottom() {
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'instant' });
+  }
+
   private getTodayDate(): string {
     const today = new Date();
     const year = today.getFullYear();
