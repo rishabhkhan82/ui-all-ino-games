@@ -110,6 +110,10 @@ export class GameStatusComponent implements OnInit, OnDestroy {
     window.history.back();
   }
 
+  refresh() {
+    window.location.reload();
+  }
+
   scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }
