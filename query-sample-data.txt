@@ -1,0 +1,68 @@
+-- Game Type 1 (Orange City Day)
+INSERT INTO games (name, game_type, active, open_time, open_number, close_time, close_number, final_number, created_at) 
+VALUES ('Orange City Day', 1, 0, '2026-05-07 13:00:00', 288, '2026-05-07 16:00:00', 126, 89, '2026-05-07 13:00:00');
+
+INSERT INTO games (name, game_type, active, open_time, open_number, close_time, close_number, final_number, created_at) 
+VALUES ('Orange City Day', 1, 0, '2026-05-08 13:00:00', 288, '2026-05-08 16:00:00', 126, 89, '2026-05-08 13:00:00');
+
+INSERT INTO games (name, game_type, active, open_time, open_number, close_time, close_number, final_number, created_at) 
+VALUES ('Orange City Day', 1, 0, '2026-05-09 13:00:00', 288, '2026-05-09 16:00:00', 126, 89, '2026-05-09 13:00:00');
+
+INSERT INTO games (name, game_type, active, open_time, open_number, close_time, close_number, final_number, created_at) 
+VALUES ('Orange City Day', 1, 0, '2026-05-10 13:00:00', 288, '2026-05-10 16:00:00', 126, 89, '2026-05-10 13:00:00');
+
+INSERT INTO games (name, game_type, active, open_time, open_number, close_time, close_number, final_number, created_at) 
+VALUES ('Orange City Day', 1, 0, '2026-05-11 13:00:00', 288, '2026-05-11 16:00:00', 126, 89, '2026-05-11 13:00:00');
+
+INSERT INTO games (name, game_type, active, open_time, open_number, close_time, close_number, final_number, created_at) 
+VALUES ('Orange City Day', 1, 0, '2026-05-12 13:00:00', 288, '2026-05-12 16:00:00', 126, 89, '2026-05-12 13:00:00');
+
+INSERT INTO games (name, game_type, active, open_time, open_number, close_time, close_number, final_number, created_at) 
+VALUES ('Orange City Day', 1, 0, '2026-05-13 13:00:00', 288, '2026-05-13 16:00:00', 126, 89, '2026-05-13 13:00:00');
+
+INSERT INTO games (name, game_type, active, open_time, open_number, close_time, close_number, final_number, created_at) 
+VALUES ('Orange City Day', 1, 0, '2026-05-14 13:00:00', 288, '2026-05-14 16:00:00', 126, 89, '2026-05-14 13:00:00');
+
+INSERT INTO games (name, game_type, active, open_time, open_number, close_time, close_number, final_number, created_at) 
+VALUES ('Orange City Day', 1, 0, '2026-05-15 13:00:00', 288, '2026-05-15 16:00:00', 126, 89, '2026-05-15 13:00:00');
+
+INSERT INTO games (name, game_type, active, open_time, open_number, close_time, close_number, final_number, created_at) 
+VALUES ('Orange City Day', 1, 0, '2026-05-16 13:00:00', 288, '2026-05-16 16:00:00', 126, 89, '2026-05-16 13:00:00');
+
+INSERT INTO games (name, game_type, active, open_time, open_number, close_time, close_number, final_number, created_at) 
+VALUES ('Orange City Day', 1, 0, '2026-05-17 13:00:00', 288, '2026-05-17 16:00:00', 126, 89, '2026-05-17 13:00:00');
+
+
+-- Game Type 2 (Orange City Night)
+INSERT INTO games (name, game_type, active, open_time, open_number, close_time, close_number, final_number, created_at) 
+VALUES ('Orange City Night', 2, 0, '2026-05-07 20:12:06', 288, '2026-05-07 23:00:00', 126, 89, '2026-05-07 20:00:00');
+
+INSERT INTO games (name, game_type, active, open_time, open_number, close_time, close_number, final_number, created_at) 
+VALUES ('Orange City Night', 2, 0, '2026-05-08 20:12:06', 288, '2026-05-08 23:00:00', 126, 89, '2026-05-08 20:00:00');
+
+INSERT INTO games (name, game_type, active, open_time, open_number, close_time, close_number, final_number, created_at) 
+VALUES ('Orange City Night', 2, 0, '2026-05-09 20:12:06', 288, '2026-05-09 23:00:00', 126, 89, '2026-05-09 20:00:00');
+
+INSERT INTO games (name, game_type, active, open_time, open_number, close_time, close_number, final_number, created_at) 
+VALUES ('Orange City Night', 2, 0, '2026-05-10 20:12:06', 288, '2026-05-10 23:00:00', 126, 89, '2026-05-10 20:00:00');
+
+INSERT INTO games (name, game_type, active, open_time, open_number, close_time, close_number, final_number, created_at) 
+VALUES ('Orange City Night', 2, 0, '2026-05-11 20:12:06', 288, '2026-05-11 23:00:00', 126, 89, '2026-05-11 20:00:00');
+
+INSERT INTO games (name, game_type, active, open_time, open_number, close_time, close_number, final_number, created_at) 
+VALUES ('Orange City Night', 2, 0, '2026-05-12 20:12:06', 288, '2026-05-12 23:00:00', 126, 89, '2026-05-12 20:00:00');
+
+INSERT INTO games (name, game_type, active, open_time, open_number, close_time, close_number, final_number, created_at) 
+VALUES ('Orange City Night', 2, 0, '2026-05-13 20:12:06', 288, '2026-05-13 23:00:00', 126, 89, '2026-05-13 20:00:00');
+
+INSERT INTO games (name, game_type, active, open_time, open_number, close_time, close_number, final_number, created_at) 
+VALUES ('Orange City Night', 2, 0, '2026-05-14 20:12:06', 288, '2026-05-14 23:00:00', 126, 89, '2026-05-14 20:00:00');
+
+INSERT INTO games (name, game_type, active, open_time, open_number, close_time, close_number, final_number, created_at) 
+VALUES ('Orange City Night', 2, 0, '2026-05-15 20:12:06', 288, '2026-05-15 23:00:00', 126, 89, '2026-05-15 20:00:00');
+
+INSERT INTO games (name, game_type, active, open_time, open_number, close_time, close_number, final_number, created_at) 
+VALUES ('Orange City Night', 2, 0, '2026-05-16 20:12:06', 288, '2026-05-16 23:00:00', 126, 89, '2026-05-16 20:00:00');
+
+INSERT INTO games (name, game_type, active, open_time, open_number, close_time, close_number, final_number, created_at) 
+VALUES ('Orange City Night', 2, 0, '2026-05-17 20:12:06', 288, '2026-05-17 23:00:00', 126, 89, '2026-05-17 20:00:00');
